@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    volumes:
+      - "./mysql_data:/var/lib/mysql"
+    restart: on-failure
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password # for mysql ver 8
+    environment:
+      MYSQL_DATABASE: 'sample_database'
+      MYSQL_USER: 'mysql_user'
+      MYSQL_PASSWORD: 'mysql_user_pass'
+      MYSQL_ROOT_PASSWORD: 'password123'
+      MYSQL_ROOT_HOST: '%'
+
+  phpmyadmin_web:
+    image: phpmyadmin:5.2.1
+    container_name: phpmyadmin
+    restart: on-failure
+    ports:
+      - "8001:80"
+    volumes:
+      - './config.user.inc.php:/etc/phpmyadmin/config.user.inc.php'
+    environment:
+      PMA_HOST: mysql 
+      UPLOAD_LIMIT: 50000000    # limit for uploading sql files from the Web UI 
