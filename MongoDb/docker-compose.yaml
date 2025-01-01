@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 services:
   mongo:
     image: mongo:7.0-jammy
@@ -6,28 +6,20 @@ services:
     volumes:
       - ./mongo_data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     ports:
-      - "0.0.0.0:27017:27017"
-    networks:
-      - apps-network
+      - "27017:27017"
 
   mongo-express:
     image: mongo-express:1.0.2
     container_name: mongo-express
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_MONGODB_PORT: "27017"
     ports:
-      - "0.0.0.0:8081:8081"
+      - "8081:8081"
     depends_on:
       - mongo
-    networks:
-      - apps-network
-
-networks:
-  apps-network:
-    external: true
