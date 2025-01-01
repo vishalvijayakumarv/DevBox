@@ -18,6 +18,6 @@ To use this repository, ensure you have Docker and Docker Compose installed on y
 
 1. Clone this repository:
    ```sh
-   git clone https://github.com/vishalvijaykumarv/Docker_DevBox.git
-   cd Docker_DevBox
+   git clone https://github.com/vishalvijaykumarv/DevBox.git
+   cd DevBox
    ```
