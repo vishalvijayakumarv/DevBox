@@ -4,7 +4,7 @@ services:
     image: mysql:8.0
     container_name: mysql
     volumes:
-      - "./mysql_data:/var/lib/mysql"
+      - mysql_data:/var/lib/mysql
     restart: on-failure
     ports:
       - "${MYSQL_PORT}:3306"
@@ -26,3 +26,7 @@ services:
     environment:
       PMA_HOST: ${PMA_HOST}
       UPLOAD_LIMIT: ${UPLOAD_LIMIT}
+
+volumes:
+  mysql_data:
+    driver: local

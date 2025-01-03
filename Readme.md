@@ -5,12 +5,15 @@ It is designed to help developers build, test, and run their applications seamle
 
 ## Contents
 
-- [Airflow](#airflow)
-- [ELK_Stack](#elk-stack)
-- [Jenkins](#jenkins)
-- [Kafka](#kafka)
-- [MongoDB](#mongodb)
-- [MySQL](#mysql-with-phpmyadmin)
+- [Airflow](./Airflow/README.md)
+- [DynamoDB](./DynamoDB/README.md)
+- [Elasticsearch](./Elasticsearch/README.md)
+- [Jenkins](./Jenkins/README.md)
+- [Kafka](./kafka/README.md)
+- [MongoDB](./MongoDb/README.md)
+- [MySQL](./Mysql/README.md)
+- [Postgres](./Postgres/README.md)
+- [Redis](./Redis/README.md)
 
 ## Getting Started
 
