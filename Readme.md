@@ -9,7 +9,7 @@ It is designed to help developers build, test, and run their applications seamle
 - [DynamoDB](./DynamoDB/README.md)
 - [Elasticsearch](./Elasticsearch/README.md)
 - [Jenkins](./Jenkins/README.md)
-- [Kafka](./kafka/README.md)
+- [Kafka](./Kafka/README.md)
 - [MongoDB](./MongoDb/README.md)
 - [MySQL](./Mysql/README.md)
 - [Postgres](./Postgres/README.md)
