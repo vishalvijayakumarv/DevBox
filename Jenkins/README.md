@@ -1,5 +1,5 @@
 # Jenkins Docker Compose Setup
-
+#### Ref https://www.jenkins.io/doc/book/installing/docker/
 This project sets up Jenkins using Docker Compose, with persistent configuration stored in the `jenkins_home` folder.
 
 ## Setup
@@ -10,6 +10,7 @@ This project sets up Jenkins using Docker Compose, with persistent configuration
 
 3. **Folder Structure**:
    - The `jenkins_home` folder holds all Jenkins configurations and is mounted as a volume inside the Jenkins Docker container.
+   - A `.env` file is required for configuring the Jenkins agent.
 
 ## Running Jenkins
 
@@ -34,7 +35,7 @@ You will see the admin token displayed in the logs. Copy the token for login.
 
 ## Customizing the Jenkins Master Docker Container
 
-If you need to install additional tools inside the Jenkins master container (e.g., Ansible), you can do so by editing the `Dockerfile`.
+If you need to install additional tools inside the Jenkins master container (e.g., Ansible), you can do so by editing the `master/Dockerfile`.
 
 Once you've updated the Dockerfile, rebuild the container:
 
@@ -69,4 +70,41 @@ This will stop the containers and remove them.
 
 ```bash
 docker logs jenkins-master
+```
+
+## Configuring the Jenkins Build Agent
+#### ref https://github.com/jenkinsci/docker-inbound-agent
+1. **Add a New Node**:
+   - In the Jenkins UI:
+     - Navigate to **Manage Jenkins > Nodes > New Node**.
+     - Provide a name for the node (e.g., `Builder-01`) and configure it as a **Permanent Agent**.
+   - Save the node configuration.
+   - Go to the node's status page to retrieve the **secret key** & **node name** and use it in the `.env` file.
+
+2. **Prepare the `.env` File**:
+   - Create a `.env` file in the root directory with the following values:
+     ```plaintext
+     JENKINS_AGENT_NAME=<node_name>
+     JENKINS_SECRET=<agent_secret>
+     ```
+   - Replace `<node_name>` with the name of the agent node you create.
+   - Replace `<agent_secret>` with the secret retrieved from the Jenkins UI.
+
+3. **Rebuild and Start the Agent**:
+   - After updating the `.env` file, restart the services:
+     ```bash
+     docker-compose up -d --build
+     ```
+
+4. **Verify Connection**:
+   - Check the **Manage Nodes and Clouds** section in Jenkins to see if the agent is connected.
+
+## Troubleshooting
+
+- If the agent is not connecting, ensure the `.env` file is correctly configured and matches the node name and secret from Jenkins.
+- Check the logs for errors:
+
+```bash
+docker logs -f jenkins-master
+docker logs -f jenkins-agent
 ```
