@@ -1,5 +1,6 @@
 # Jenkins Docker Compose Setup
 #### Ref https://www.jenkins.io/doc/book/installing/docker/
+#### Samples Ref https://github1s.com/kodekloudhub/course-jenkins-project
 This project sets up Jenkins using Docker Compose, with persistent configuration stored in the `jenkins_home` folder.
 
 ## Setup

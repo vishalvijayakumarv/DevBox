@@ -1,0 +1,119 @@
+pipeline {
+    // agent any  // Runs on any available agent
+    agent { label 'Builder-01' } // Runs the job on the agent with label 'Builder-01'
+
+    options {
+        timeout(time: 30, unit: 'MINUTES')   // Job times out if it exceeds 30 minutes
+        buildDiscarder(logRotator(numToKeepStr: '5'))  // Keeps only the last 5 builds
+        disableConcurrentBuilds()  // Ensures only one build runs at a time
+    }
+
+    environment {
+        PROJECT_NAME = "ProjectName"
+        BUILD_DIR = "/tmp/build"
+    }
+
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Git branch to build')
+        choice(name: 'DEPLOY_ENV', choices: ['dev', 'staging', 'prod'], description: 'Deployment environment')
+    }
+
+    stages {
+
+        stage('Initialize') {
+            steps {
+                script {
+                    sh """
+                        #!/bin/bash
+                        echo "Starting build process for $PROJECT_NAME on branch ${params.BRANCH}"
+                        mkdir -p $BUILD_DIR
+                    """
+                }
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                script {
+                    sh 'echo "Fetching code from GitHub..."'
+                    // sh 'git clone -b ${params.BRANCH} https://github.com/example/repository.git $BUILD_DIR'
+                    sh 'sleep 5'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh 'echo "Building the application..."'
+                    sh 'sleep 5'
+                    // sh 'cd $BUILD_DIR && make build'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        script {
+                            sh 'echo "Running unit tests..."'
+                            // sh 'cd $BUILD_DIR && make test-unit'
+                            sh 'sleep 5'
+                        }
+                    }
+                }
+                stage('Integration Tests') {
+                    steps {
+                        script {
+                            sh 'echo "Running integration tests..."'
+                            // sh 'cd $BUILD_DIR && make test-integration'
+                            sh 'sleep 5'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                expression { params.DEPLOY_ENV != 'prod' }  // Skip deployment for prod
+            }
+            steps {
+                script {
+                    def deploy_env = params.DEPLOY_ENV  // Store parameter in a Groovy variable
+                    sh """
+                        echo "Deploying to ${deploy_env} environment..."
+                        # scp -r \$BUILD_DIR/* user@server:/var/www/html/${deploy_env}
+                        sleep 5
+                    """
+                }
+            }
+        }
+
+    }
+
+    post {
+        success {
+            sh 'echo "Build completed successfully!"'
+            // emailext subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            //          body: "Build completed successfully.",
+            //          recipientProviders: [developers()]
+        }
+        failure {
+            sh 'echo "Build failed. Check logs."'
+            // emailext subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            //          body: "Build failed. Check logs for details.",
+            //          recipientProviders: [developers()]
+        }
+        always {
+            script {
+                def buildDir = env.BUILD_DIR  // Store in a Groovy variable
+                sh """
+                    echo "Cleaning up workspace..."
+                    rm -rf ${buildDir}
+                """
+            }
+        }
+    }
+}

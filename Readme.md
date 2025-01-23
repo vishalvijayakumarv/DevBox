@@ -1,6 +1,6 @@
-# DevOps Local Development Environment
+# Local Development Environment
 
-This repository provides a set of Docker and Docker Compose files to set up local development environments for various applications. 
+This repository provides a set of Dockers to set up local development environments for various applications.
 It is designed to help developers build, test, and run their applications seamlessly.
 
 ## Contents
