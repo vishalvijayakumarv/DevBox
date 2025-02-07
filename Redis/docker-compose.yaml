@@ -10,6 +10,14 @@ services:
     command: ["redis-server", "--save", "60", "1", "--loglevel", "warning", "--appendonly", "yes"]
     mem_limit: 512m # Limiting memory usage
 
+  redis-streams:
+    image: redis:alpine
+    container_name: redis-streams
+    ports:
+      - "6378:6379"
+    networks:
+      - app-network
+
 volumes:
   redis_data:
     driver: local
