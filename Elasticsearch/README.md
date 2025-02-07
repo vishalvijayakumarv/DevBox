@@ -26,6 +26,21 @@ To spin up the Elasticsearch cluster along with Kibana, follow these steps:
 
    This will pull the necessary Docker images and start Elasticsearch and Kibana in detached mode.
 
+## Diff Type of cluster 
+
+To spin the elasticsearch cluster 
+
+1. Use cluster-docker-compose.yaml file to spin cluster setup with ssl certificates 
+2. Use single-node-docker-compose.yaml file to spin single node cluster without any security features
+
+   ```bash
+   docker compose -f cluster-docker-compose.yaml up -d
+   ```
+
+   ```bash
+   docker compose -f single-node-docker-compose.yaml up -d
+   ```
+
 ## Accessing Kibana
 
 Once the services are up and running, access Kibana at:

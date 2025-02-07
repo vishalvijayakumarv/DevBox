@@ -1,0 +1,48 @@
+services:
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elastic
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - ${ES_PORT}:9200
+    environment:
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - cluster.name=${CLUSTER_NAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    mem_limit: ${MEM_LIMIT}
+    networks:
+      - app-network
+
+  kibana:
+    depends_on:
+      - elastic
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: kibana
+    volumes:
+      - kibanadata:/usr/share/kibana/data
+    ports:
+      - ${KIBANA_PORT}:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elastic:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    mem_limit: ${MEM_LIMIT}
+    networks:
+      - app-network
+
+volumes:
+  esdata:
+    name: esdata
+    driver: local
+  kibanadata:
+    name: kibanadata
+    driver: local
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
