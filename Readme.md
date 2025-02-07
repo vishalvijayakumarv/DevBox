@@ -12,6 +12,7 @@ It is designed to help developers build, test, and run their applications seamle
 - [Kafka](./Kafka/README.md)
 - [MongoDB](./MongoDb/README.md)
 - [MySQL](./Mysql/README.md)
+- [Qdrant](./Qdrant/README.md)
 - [Postgres](./Postgres/README.md)
 - [Redis](./Redis/README.md)
 
